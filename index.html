@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,195 +6,44 @@
     <title>DXG2 Associate Shipment Handling Questionnaire</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #1a1a2e;
-            color: #e0e0e0;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-            background: #16213e;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-        }
-        h1 {
-            text-align: center;
-            color: #4fc3f7;
-            font-size: 1.5em;
-            margin-bottom: 5px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #90caf9;
-            font-size: 0.85em;
-            margin-bottom: 15px;
-        }
-        .intro {
-            background: #0f3460;
-            border-left: 4px solid #4fc3f7;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 25px;
-            font-size: 0.9em;
-            line-height: 1.5;
-        }
-        .section {
-            display: none;
-            animation: fadeIn 0.3s ease-in;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; background: #16213e; border-radius: 12px; padding: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #4fc3f7; font-size: 1.5em; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #90caf9; font-size: 0.85em; margin-bottom: 15px; }
+        .intro { background: #0f3460; border-left: 4px solid #4fc3f7; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-size: 0.9em; line-height: 1.5; }
+        .section { display: none; animation: fadeIn 0.3s ease-in; }
         .section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .section-title {
-            color: #4fc3f7;
-            font-size: 1.2em;
-            margin-bottom: 20px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #4fc3f7;
-        }
-        .question {
-            background: #1a1a3e;
-            border-radius: 8px;
-            padding: 18px;
-            margin-bottom: 15px;
-        }
-        .question label.q-label {
-            display: block;
-            font-weight: 600;
-            color: #e0e0e0;
-            margin-bottom: 12px;
-            font-size: 0.95em;
-            line-height: 1.4;
-        }
-        .radio-group, .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .radio-group label, .checkbox-group label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 12px;
-            background: #16213e;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-size: 0.9em;
-        }
-        .radio-group label:hover, .checkbox-group label:hover {
-            background: #0f3460;
-        }
-        input[type="radio"], input[type="checkbox"] {
-            accent-color: #4fc3f7;
-            width: 18px;
-            height: 18px;
-        }
-        .likert-scale {
-            display: flex;
-            justify-content: space-between;
-            gap: 5px;
-            margin-top: 5px;
-        }
-        .likert-scale label {
-            flex: 1;
-            text-align: center;
-            padding: 10px 5px;
-            background: #16213e;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.8em;
-        }
+        .section-title { color: #4fc3f7; font-size: 1.2em; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #4fc3f7; }
+        .question { background: #1a1a3e; border-radius: 8px; padding: 18px; margin-bottom: 15px; }
+        .question label.q-label { display: block; font-weight: 600; color: #e0e0e0; margin-bottom: 12px; font-size: 0.95em; line-height: 1.4; }
+        .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+        .radio-group label, .checkbox-group label { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #16213e; border-radius: 6px; cursor: pointer; transition: background 0.2s; font-size: 0.9em; }
+        .radio-group label:hover, .checkbox-group label:hover { background: #0f3460; }
+        input[type="radio"], input[type="checkbox"] { accent-color: #4fc3f7; width: 18px; height: 18px; }
+        .likert-scale { display: flex; justify-content: space-between; gap: 5px; margin-top: 5px; }
+        .likert-scale label { flex: 1; text-align: center; padding: 10px 5px; background: #16213e; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 0.8em; }
         .likert-scale label:hover { background: #0f3460; }
         .likert-scale input[type="radio"] { display: none; }
-        .likert-scale input[type="radio"]:checked + span {
-            color: #4fc3f7;
-            font-weight: bold;
-        }
-        .likert-scale label:has(input:checked) {
-            background: #0f3460;
-            border: 2px solid #4fc3f7;
-        }
-        .likert-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75em;
-            color: #90caf9;
-            margin-bottom: 8px;
-        }
-        textarea {
-            width: 100%;
-            min-height: 80px;
-            background: #16213e;
-            border: 1px solid #2a2a5e;
-            border-radius: 6px;
-            color: #e0e0e0;
-            padding: 12px;
-            font-family: inherit;
-            font-size: 0.9em;
-            resize: vertical;
-        }
+        .likert-scale input[type="radio"]:checked + span { color: #4fc3f7; font-weight: bold; }
+        .likert-scale label:has(input:checked) { background: #0f3460; border: 2px solid #4fc3f7; }
+        .likert-labels { display: flex; justify-content: space-between; font-size: 0.75em; color: #90caf9; margin-bottom: 8px; }
+        textarea { width: 100%; min-height: 80px; background: #16213e; border: 1px solid #2a2a5e; border-radius: 6px; color: #e0e0e0; padding: 12px; font-family: inherit; font-size: 0.9em; resize: vertical; }
         textarea:focus { outline: none; border-color: #4fc3f7; }
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-        }
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-next {
-            background: #4fc3f7;
-            color: #1a1a2e;
-        }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 25px; }
+        .btn { padding: 12px 30px; border: none; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-next { background: #4fc3f7; color: #1a1a2e; }
         .btn-next:hover { background: #81d4fa; }
-        .btn-prev {
-            background: #2a2a5e;
-            color: #e0e0e0;
-        }
+        .btn-prev { background: #2a2a5e; color: #e0e0e0; }
         .btn-prev:hover { background: #3a3a7e; }
-        .btn-submit {
-            background: #66bb6a;
-            color: #1a1a2e;
-        }
+        .btn-submit { background: #66bb6a; color: #1a1a2e; }
         .btn-submit:hover { background: #81c784; }
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #2a2a5e;
-            border-radius: 3px;
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4fc3f7, #81d4fa);
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-        .thank-you {
-            display: none;
-            text-align: center;
-            padding: 40px 20px;
-        }
+        .progress-bar { width: 100%; height: 6px; background: #2a2a5e; border-radius: 3px; margin-bottom: 25px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #4fc3f7, #81d4fa); border-radius: 3px; transition: width 0.3s ease; }
+        .thank-you { display: none; text-align: center; padding: 40px 20px; }
         .thank-you h2 { color: #66bb6a; margin-bottom: 15px; }
         .thank-you p { color: #90caf9; line-height: 1.6; }
-        .section-instruction {
-            font-size: 0.85em;
-            color: #90caf9;
-            font-style: italic;
-            margin-bottom: 15px;
-        }
+        .section-instruction { font-size: 0.85em; color: #90caf9; font-style: italic; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -208,7 +56,6 @@
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 14.28%"></div></div>
     <form id="questionnaireForm">
 
-
         <!-- SECTION 1: About You -->
         <div class="section active" id="section1">
             <h2 class="section-title">Section 1 — About You</h2>
@@ -216,8 +63,8 @@
                 <label class="q-label">Q1. Which shift pattern do you work?</label>
                 <div class="radio-group">
                     <label><input type="radio" name="q1" value="Nightshift (sortation biased)"><span>Nightshift (sortation biased)</span></label>
-                    <label><input type="radio" name="q1" value="Hybrid (sort & pick/stage)"><span>Hybrid (sort & pick/stage)</span></label>
-                    <label><input type="radio" name="q1" value="AMPT (pick & stage biased)"><span>AMPT (pick & stage biased)</span></label>
+                    <label><input type="radio" name="q1" value="Hybrid (sort & pick/stage)"><span>Hybrid (sort &amp; pick/stage)</span></label>
+                    <label><input type="radio" name="q1" value="AMPT (pick & stage biased)"><span>AMPT (pick &amp; stage biased)</span></label>
                     <label><input type="radio" name="q1" value="AM Team (Dispatch)"><span>AM Team (Dispatch)</span></label>
                     <label><input type="radio" name="q1" value="PM Team (RTS)"><span>PM Team (RTS)</span></label>
                 </div>
@@ -299,12 +146,12 @@
             <div class="question">
                 <label class="q-label">Q8. Which training topics would benefit you most? (Tick all that apply)</label>
                 <div class="checkbox-group">
-                    <label><input type="checkbox" name="q8" value="Correct lifting & handling technique"><span>Correct lifting & handling technique</span></label>
+                    <label><input type="checkbox" name="q8" value="Correct lifting & handling technique"><span>Correct lifting &amp; handling technique</span></label>
                     <label><input type="checkbox" name="q8" value="Team-lift procedures"><span>Team-lift procedures</span></label>
-                    <label><input type="checkbox" name="q8" value="Damage identification & classification"><span>Damage identification & classification</span></label>
+                    <label><input type="checkbox" name="q8" value="Damage identification & classification"><span>Damage identification &amp; classification</span></label>
                     <label><input type="checkbox" name="q8" value="Problem Solve escalation process"><span>Problem Solve escalation process</span></label>
-                    <label><input type="checkbox" name="q8" value="Belt loading & spacing standards"><span>Belt loading & spacing standards</span></label>
-                    <label><input type="checkbox" name="q8" value="Quality standards & expectations"><span>Quality standards & expectations</span></label>
+                    <label><input type="checkbox" name="q8" value="Belt loading & spacing standards"><span>Belt loading &amp; spacing standards</span></label>
+                    <label><input type="checkbox" name="q8" value="Quality standards & expectations"><span>Quality standards &amp; expectations</span></label>
                 </div>
             </div>
             <div class="nav-buttons">
@@ -351,16 +198,16 @@
                 </div>
             </div>
             <div class="question">
-                <label class="q-label">Q13. What makes it difficult to handle packages properly? (Tick all that apply)</label>
+                <label class="q-label">Q12. What makes it difficult to handle packages properly? (Tick all that apply)</label>
                 <div class="checkbox-group">
-                    <label><input type="checkbox" name="q13" value="Time pressure / rate expectations"><span>Time pressure / rate expectations</span></label>
-                    <label><input type="checkbox" name="q13" value="Packages already damaged on arrival"><span>Packages already damaged on arrival</span></label>
-                    <label><input type="checkbox" name="q13" value="Heavy or awkwardly sized packages"><span>Heavy or awkwardly sized packages</span></label>
-                    <label><input type="checkbox" name="q13" value="Unclear procedures"><span>Unclear procedures</span></label>
-                    <label><input type="checkbox" name="q13" value="Insufficient space in work area"><span>Insufficient space in work area</span></label>
-                    <label><input type="checkbox" name="q13" value="Conveyor belt speed"><span>Conveyor belt speed</span></label>
-                    <label><input type="checkbox" name="q13" value="Lack of equipment (carts, dollies, etc.)"><span>Lack of equipment (carts, dollies, etc.)</span></label>
-                    <label><input type="checkbox" name="q13" value="Inadequate lighting / visibility"><span>Inadequate lighting / visibility</span></label>
+                    <label><input type="checkbox" name="q12" value="Time pressure / rate expectations"><span>Time pressure / rate expectations</span></label>
+                    <label><input type="checkbox" name="q12" value="Packages already damaged on arrival"><span>Packages already damaged on arrival</span></label>
+                    <label><input type="checkbox" name="q12" value="Heavy or awkwardly sized packages"><span>Heavy or awkwardly sized packages</span></label>
+                    <label><input type="checkbox" name="q12" value="Unclear procedures"><span>Unclear procedures</span></label>
+                    <label><input type="checkbox" name="q12" value="Insufficient space in work area"><span>Insufficient space in work area</span></label>
+                    <label><input type="checkbox" name="q12" value="Conveyor belt speed"><span>Conveyor belt speed</span></label>
+                    <label><input type="checkbox" name="q12" value="Lack of equipment (carts, dollies, etc.)"><span>Lack of equipment (carts, dollies, etc.)</span></label>
+                    <label><input type="checkbox" name="q12" value="Inadequate lighting / visibility"><span>Inadequate lighting / visibility</span></label>
                 </div>
             </div>
             <div class="nav-buttons">
@@ -371,10 +218,21 @@
 
         <!-- SECTION 4: Equipment & Resources -->
         <div class="section" id="section4">
-            <h2 class="section-title">Section 4 — Equipment & Resources</h2>
+            <h2 class="section-title">Section 4 — Equipment &amp; Resources</h2>
             <p class="section-instruction">Rate each statement from 1 (strongly disagree) to 5 (strongly agree):</p>
             <div class="question">
-                <label class="q-label">Q14. I have access to the equipment I need to handle packages safely.</label>
+                <label class="q-label">Q13. I have access to the equipment I need to handle packages safely.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q13" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q13" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q13" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q13" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q13" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q14. The equipment available is in good, reliable condition.</label>
                 <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
                 <div class="likert-scale">
                     <label><input type="radio" name="q14" value="1"><span>1</span></label>
@@ -385,7 +243,7 @@
                 </div>
             </div>
             <div class="question">
-                <label class="q-label">Q15. The equipment available is in good, reliable condition.</label>
+                <label class="q-label">Q15. Consumables (labels, tape, PPE, etc.) are easy to find when needed.</label>
                 <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
                 <div class="likert-scale">
                     <label><input type="radio" name="q15" value="1"><span>1</span></label>
@@ -396,19 +254,8 @@
                 </div>
             </div>
             <div class="question">
-                <label class="q-label">Q16. Consumables (labels, tape, PPE, etc.) are easy to find when needed.</label>
-                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
-                <div class="likert-scale">
-                    <label><input type="radio" name="q16" value="1"><span>1</span></label>
-                    <label><input type="radio" name="q16" value="2"><span>2</span></label>
-                    <label><input type="radio" name="q16" value="3"><span>3</span></label>
-                    <label><input type="radio" name="q16" value="4"><span>4</span></label>
-                    <label><input type="radio" name="q16" value="5"><span>5</span></label>
-                </div>
-            </div>
-            <div class="question">
-                <label class="q-label">Q17. What equipment or resources would help you work more safely or efficiently?</label>
-                <textarea name="q17" placeholder="Type your answer here..."></textarea>
+                <label class="q-label">Q16. What equipment or resources would help you work more safely or efficiently?</label>
+                <textarea name="q16" placeholder="Type your answer here..."></textarea>
             </div>
             <div class="nav-buttons">
                 <button type="button" class="btn btn-prev" onclick="prevSection()">← Back</button>
@@ -421,7 +268,18 @@
             <h2 class="section-title">Section 5 — Quality Mindset</h2>
             <p class="section-instruction">Rate each statement from 1 (strongly disagree) to 5 (strongly agree):</p>
             <div class="question">
-                <label class="q-label">Q18. I understand how damaged packages directly affect our customers.</label>
+                <label class="q-label">Q17. I understand how damaged packages directly affect our customers.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q17" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q17" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q17" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q17" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q17" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q18. I feel personally responsible for ensuring packages arrive in good condition.</label>
                 <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
                 <div class="likert-scale">
                     <label><input type="radio" name="q18" value="1"><span>1</span></label>
@@ -432,7 +290,7 @@
                 </div>
             </div>
             <div class="question">
-                <label class="q-label">Q19. I feel personally responsible for ensuring packages arrive in good condition.</label>
+                <label class="q-label">Q19. When I see pre-existing damage (from an upstream site), I report and escalate it.</label>
                 <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
                 <div class="likert-scale">
                     <label><input type="radio" name="q19" value="1"><span>1</span></label>
@@ -440,17 +298,6 @@
                     <label><input type="radio" name="q19" value="3"><span>3</span></label>
                     <label><input type="radio" name="q19" value="4"><span>4</span></label>
                     <label><input type="radio" name="q19" value="5"><span>5</span></label>
-                </div>
-            </div>
-            <div class="question">
-                <label class="q-label">Q20. When I see pre-existing damage (from an upstream site), I report and escalate it.</label>
-                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
-                <div class="likert-scale">
-                    <label><input type="radio" name="q20" value="1"><span>1</span></label>
-                    <label><input type="radio" name="q20" value="2"><span>2</span></label>
-                    <label><input type="radio" name="q20" value="3"><span>3</span></label>
-                    <label><input type="radio" name="q20" value="4"><span>4</span></label>
-                    <label><input type="radio" name="q20" value="5"><span>5</span></label>
                 </div>
             </div>
             <div class="nav-buttons">
@@ -463,13 +310,13 @@
         <div class="section" id="section6">
             <h2 class="section-title">Section 6 — Challenges</h2>
             <div class="question">
-                <label class="q-label">Q21. When you need guidance on a handling procedure, who do you typically ask?</label>
+                <label class="q-label">Q20. When you need guidance on a handling procedure, who do you typically ask?</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="q21" value="Direct manager"><span>Direct manager</span></label>
-                    <label><input type="radio" name="q21" value="Ambassador"><span>Ambassador</span></label>
-                    <label><input type="radio" name="q21" value="Experienced colleague"><span>Experienced colleague</span></label>
-                    <label><input type="radio" name="q21" value="Problem Solve team"><span>Problem Solve team</span></label>
-                    <label><input type="radio" name="q21" value="I figure it out myself"><span>I figure it out myself</span></label>
+                    <label><input type="radio" name="q20" value="Direct manager"><span>Direct manager</span></label>
+                    <label><input type="radio" name="q20" value="Ambassador"><span>Ambassador</span></label>
+                    <label><input type="radio" name="q20" value="Experienced colleague"><span>Experienced colleague</span></label>
+                    <label><input type="radio" name="q20" value="Problem Solve team"><span>Problem Solve team</span></label>
+                    <label><input type="radio" name="q20" value="I figure it out myself"><span>I figure it out myself</span></label>
                 </div>
             </div>
             <div class="nav-buttons">
@@ -505,14 +352,14 @@
         </div>
     </form>
 
-    <!-- Thank You Screen -->
     <div class="thank-you" id="thankYou">
         <h2>✅ Thank You!</h2>
         <p>Your responses have been submitted successfully.<br><br>
         Your feedback will directly shape training, support, and the way we handle shipments at DXG2.</p>
     </div>
 </div>
-<Script>
+
+<script>
     let currentSection = 1;
     const totalSections = 7;
 
@@ -537,63 +384,52 @@
     }
 
     function updateProgress() {
-        const percent = (currentSection / totalSections) * 100;
-        document.getElementById('progressFill').style.width = percent + '%';
+        document.getElementById('progressFill').style.width = (currentSection / totalSections * 100) + '%';
     }
 
     function getFormData() {
-        const form = document.getElementById('questionnaireForm');
-        const data = {};
+        var form = document.getElementById('questionnaireForm');
+        var data = {};
 
         // Single-select radio questions
-        const radioQs = ['q1','q2','q3','q4','q5','q6','q7','q9','q10','q11','q14','q15','q16','q18','q19','q20','q21'];
-        radioQs.forEach(q => {
-            const selected = form.querySelector('input[name="' + q + '"]:checked');
-            data[q] = selected ? selected.value : '';
+        ['q1','q2','q3','q4','q5','q6','q7','q9','q10','q11','q13','q14','q15','q17','q18','q19','q20'].forEach(function(q) {
+            var sel = form.querySelector('input[name="' + q + '"]:checked');
+            data[q] = sel ? sel.value : '';
         });
 
         // Multi-select checkbox questions
-        const checkboxQs = ['q8', 'q13'];
-        checkboxQs.forEach(q => {
-            const checked = form.querySelectorAll('input[name="' + q + '"]:checked');
-            const values = Array.from(checked).map(cb => cb.value);
-            data[q] = values.join('; ');
+        ['q8', 'q12'].forEach(function(q) {
+            var checked = form.querySelectorAll('input[name="' + q + '"]:checked');
+            data[q] = Array.from(checked).map(function(cb) { return cb.value; }).join('; ');
         });
 
         // Open text questions
-        const textQs = ['q17', 'qA', 'qB', 'qC', 'qD'];
-        textQs.forEach(q => {
-            const textarea = form.querySelector('textarea[name="' + q + '"]');
-            data[q] = textarea ? textarea.value.trim() : '';
+        ['q16', 'qA', 'qB', 'qC', 'qD'].forEach(function(q) {
+            var ta = form.querySelector('textarea[name="' + q + '"]');
+            data[q] = ta ? ta.value.trim() : '';
         });
 
-        // Add timestamp
         data['timestamp'] = new Date().toLocaleString('en-GB');
-
         return data;
     }
 
     function submitForm() {
-        const data = getFormData();
+        var data = getFormData();
 
-        // Google Sheets Web App URL - REPLACE WITH YOUR DEPLOYED SCRIPT URL
-        const GOOGLE_SCRIPT_URL = https://script.google.com/macros/s/AKfycbxcRwv2iy7hUatm6hvBTois7lkQOGx9vNP90jHYzrAkunL-V2Lde1l0kSr14fHFmEcAtw/exec;
-        // Send to Google Sheets
+        var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcRwv2iy7hUatm6hvBTois7lkQOGx9vNP90jHYzrAkunL-V2Lde1l0kSr14fHFmEcAtw/exec';
+
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         })
-        .then(() => {
-            // Show thank you screen
+        .then(function() {
             document.getElementById('questionnaireForm').style.display = 'none';
             document.querySelector('.progress-bar').style.display = 'none';
             document.getElementById('thankYou').style.display = 'block';
         })
-        .catch(error => {
-            console.error('Error:', error);
-            // Still show thank you (no-cors won't return readable response)
+        .catch(function() {
             document.getElementById('questionnaireForm').style.display = 'none';
             document.querySelector('.progress-bar').style.display = 'none';
             document.getElementById('thankYou').style.display = 'block';
@@ -602,5 +438,3 @@
 </script>
 </body>
 </html>
-
-   
