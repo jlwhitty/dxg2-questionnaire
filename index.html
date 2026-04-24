@@ -416,6 +416,446 @@
     function submitForm() {
         var data = getFormData();
 
+        var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVK5pmaJDPWhnJFI0k5v63VWhZv5V-btHggAuYEGFzdcKOOI-9kjaxEbFVqV2B2qnaCQ/exec';
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(function() {
+            document.getElementById('questionnaireForm').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            document.getElementById('thankYou').style.display = 'block';
+        })
+        .catch(function() {
+            document.getElementById('questionnaireForm').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            document.getElementById('thankYou').style.display = 'block';
+        });
+    }
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DXG2 Associate Shipment Handling Questionnaire</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; background: #16213e; border-radius: 12px; padding: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #4fc3f7; font-size: 1.5em; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #90caf9; font-size: 0.85em; margin-bottom: 15px; }
+        .intro { background: #0f3460; border-left: 4px solid #4fc3f7; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-size: 0.9em; line-height: 1.5; }
+        .section { display: none; animation: fadeIn 0.3s ease-in; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .section-title { color: #4fc3f7; font-size: 1.2em; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #4fc3f7; }
+        .question { background: #1a1a3e; border-radius: 8px; padding: 18px; margin-bottom: 15px; }
+        .question label.q-label { display: block; font-weight: 600; color: #e0e0e0; margin-bottom: 12px; font-size: 0.95em; line-height: 1.4; }
+        .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+        .radio-group label, .checkbox-group label { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #16213e; border-radius: 6px; cursor: pointer; transition: background 0.2s; font-size: 0.9em; }
+        .radio-group label:hover, .checkbox-group label:hover { background: #0f3460; }
+        input[type="radio"], input[type="checkbox"] { accent-color: #4fc3f7; width: 18px; height: 18px; }
+        .likert-scale { display: flex; justify-content: space-between; gap: 5px; margin-top: 5px; }
+        .likert-scale label { flex: 1; text-align: center; padding: 10px 5px; background: #16213e; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 0.8em; }
+        .likert-scale label:hover { background: #0f3460; }
+        .likert-scale input[type="radio"] { display: none; }
+        .likert-scale input[type="radio"]:checked + span { color: #4fc3f7; font-weight: bold; }
+        .likert-scale label:has(input:checked) { background: #0f3460; border: 2px solid #4fc3f7; }
+        .likert-labels { display: flex; justify-content: space-between; font-size: 0.75em; color: #90caf9; margin-bottom: 8px; }
+        textarea { width: 100%; min-height: 80px; background: #16213e; border: 1px solid #2a2a5e; border-radius: 6px; color: #e0e0e0; padding: 12px; font-family: inherit; font-size: 0.9em; resize: vertical; }
+        textarea:focus { outline: none; border-color: #4fc3f7; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 25px; }
+        .btn { padding: 12px 30px; border: none; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-next { background: #4fc3f7; color: #1a1a2e; }
+        .btn-next:hover { background: #81d4fa; }
+        .btn-prev { background: #2a2a5e; color: #e0e0e0; }
+        .btn-prev:hover { background: #3a3a7e; }
+        .btn-submit { background: #66bb6a; color: #1a1a2e; }
+        .btn-submit:hover { background: #81c784; }
+        .progress-bar { width: 100%; height: 6px; background: #2a2a5e; border-radius: 3px; margin-bottom: 25px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #4fc3f7, #81d4fa); border-radius: 3px; transition: width 0.3s ease; }
+        .thank-you { display: none; text-align: center; padding: 40px 20px; }
+        .thank-you h2 { color: #66bb6a; margin-bottom: 15px; }
+        .thank-you p { color: #90caf9; line-height: 1.6; }
+        .section-instruction { font-size: 0.85em; color: #90caf9; font-style: italic; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>DXG2 Associate Shipment Handling Questionnaire</h1>
+    <p class="subtitle">Anonymous | ~10 minutes | Confidential</p>
+    <div class="intro">
+        Your feedback is completely anonymous and will be used to improve shipment handling, reduce damage, and make DXG2 a better place to work. There are no right or wrong answers — please be as honest as you can. Thank you!
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 14.28%"></div></div>
+    <form id="questionnaireForm">
+
+        <!-- SECTION 1: About You -->
+        <div class="section active" id="section1">
+            <h2 class="section-title">Section 1 — About You</h2>
+            <div class="question">
+                <label class="q-label">Q1. Which shift pattern do you work?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="q1" value="Nightshift (sortation biased)"><span>Nightshift (sortation biased)</span></label>
+                    <label><input type="radio" name="q1" value="Hybrid (sort & pick/stage)"><span>Hybrid (sort &amp; pick/stage)</span></label>
+                    <label><input type="radio" name="q1" value="AMPT (pick & stage biased)"><span>AMPT (pick &amp; stage biased)</span></label>
+                    <label><input type="radio" name="q1" value="AM Team (Dispatch)"><span>AM Team (Dispatch)</span></label>
+                    <label><input type="radio" name="q1" value="PM Team (RTS)"><span>PM Team (RTS)</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q2. How long have you worked at DXG2?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="q2" value="Under 3 months"><span>Under 3 months</span></label>
+                    <label><input type="radio" name="q2" value="3–6 months"><span>3–6 months</span></label>
+                    <label><input type="radio" name="q2" value="6–12 months"><span>6–12 months</span></label>
+                    <label><input type="radio" name="q2" value="1–2 years"><span>1–2 years</span></label>
+                    <label><input type="radio" name="q2" value="Over 2 years"><span>Over 2 years</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q3. How confident do you feel performing your daily shipment handling tasks?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="q3" value="Not at all confident"><span>Not at all confident</span></label>
+                    <label><input type="radio" name="q3" value="Not very confident"><span>Not very confident</span></label>
+                    <label><input type="radio" name="q3" value="Fairly confident"><span>Fairly confident</span></label>
+                    <label><input type="radio" name="q3" value="Confident"><span>Confident</span></label>
+                    <label><input type="radio" name="q3" value="Very confident"><span>Very confident</span></label>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <div></div>
+                <button type="button" class="btn btn-next" onclick="nextSection()">Next →</button>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Training -->
+        <div class="section" id="section2">
+            <h2 class="section-title">Section 2 — Training</h2>
+            <p class="section-instruction">For Q4–Q7, rate each statement from 1 (strongly disagree) to 5 (strongly agree):</p>
+            <div class="question">
+                <label class="q-label">Q4. I received sufficient training on shipment handling when I joined.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q4" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q4" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q4" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q4" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q4" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q5. I understand how to identify and classify minor vs. major damage.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q5" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q5" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q5" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q5" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q5" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q6. I know the correct process for escalating a damaged package to Problem Solve.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q6" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q6" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q6" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q6" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q6" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q7. I am aware of the current SOPs and best-practice standards for my area.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q7" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q7" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q7" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q7" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q7" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q8. Which training topics would benefit you most? (Tick all that apply)</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="q8" value="Correct lifting & handling technique"><span>Correct lifting &amp; handling technique</span></label>
+                    <label><input type="checkbox" name="q8" value="Team-lift procedures"><span>Team-lift procedures</span></label>
+                    <label><input type="checkbox" name="q8" value="Damage identification & classification"><span>Damage identification &amp; classification</span></label>
+                    <label><input type="checkbox" name="q8" value="Problem Solve escalation process"><span>Problem Solve escalation process</span></label>
+                    <label><input type="checkbox" name="q8" value="Belt loading & spacing standards"><span>Belt loading &amp; spacing standards</span></label>
+                    <label><input type="checkbox" name="q8" value="Quality standards & expectations"><span>Quality standards &amp; expectations</span></label>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" onclick="prevSection()">← Back</button>
+                <button type="button" class="btn btn-next" onclick="nextSection()">Next →</button>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Daily Practices -->
+        <div class="section" id="section3">
+            <h2 class="section-title">Section 3 — Daily Practices</h2>
+            <p class="section-instruction">Rate each statement from 1 (never / strongly disagree) to 5 (always / strongly agree):</p>
+            <div class="question">
+                <label class="q-label">Q9. I visually inspect packages before handling them.</label>
+                <div class="likert-labels"><span>Never</span><span>Always</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q9" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q9" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q9" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q9" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q9" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q10. I use proper team-lift procedures for heavy packages.</label>
+                <div class="likert-labels"><span>Never</span><span>Always</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q10" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q10" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q10" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q10" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q10" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q11. When I find a damaged package, I know exactly what to do.</label>
+                <div class="likert-labels"><span>Never</span><span>Always</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q11" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q11" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q11" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q11" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q11" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q12. What makes it difficult to handle packages properly? (Tick all that apply)</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="q12" value="Time pressure / rate expectations"><span>Time pressure / rate expectations</span></label>
+                    <label><input type="checkbox" name="q12" value="Packages already damaged on arrival"><span>Packages already damaged on arrival</span></label>
+                    <label><input type="checkbox" name="q12" value="Heavy or awkwardly sized packages"><span>Heavy or awkwardly sized packages</span></label>
+                    <label><input type="checkbox" name="q12" value="Unclear procedures"><span>Unclear procedures</span></label>
+                    <label><input type="checkbox" name="q12" value="Insufficient space in work area"><span>Insufficient space in work area</span></label>
+                    <label><input type="checkbox" name="q12" value="Conveyor belt speed"><span>Conveyor belt speed</span></label>
+                    <label><input type="checkbox" name="q12" value="Lack of equipment (carts, dollies, etc.)"><span>Lack of equipment (carts, dollies, etc.)</span></label>
+                    <label><input type="checkbox" name="q12" value="Inadequate lighting / visibility"><span>Inadequate lighting / visibility</span></label>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" onclick="prevSection()">← Back</button>
+                <button type="button" class="btn btn-next" onclick="nextSection()">Next →</button>
+            </div>
+        </div>
+
+        <!-- SECTION 4: Equipment & Resources -->
+        <div class="section" id="section4">
+            <h2 class="section-title">Section 4 — Equipment &amp; Resources</h2>
+            <p class="section-instruction">Rate each statement from 1 (strongly disagree) to 5 (strongly agree):</p>
+            <div class="question">
+                <label class="q-label">Q13. I have access to the equipment I need to handle packages safely.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q13" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q13" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q13" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q13" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q13" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q14. The equipment available is in good, reliable condition.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q14" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q14" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q14" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q14" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q14" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q15. Consumables (labels, tape, PPE, etc.) are easy to find when needed.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q15" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q15" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q15" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q15" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q15" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q16. What equipment or resources would help you work more safely or efficiently?</label>
+                <textarea name="q16" placeholder="Type your answer here..."></textarea>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" onclick="prevSection()">← Back</button>
+                <button type="button" class="btn btn-next" onclick="nextSection()">Next →</button>
+            </div>
+        </div>
+
+        <!-- SECTION 5: Quality Mindset -->
+        <div class="section" id="section5">
+            <h2 class="section-title">Section 5 — Quality Mindset</h2>
+            <p class="section-instruction">Rate each statement from 1 (strongly disagree) to 5 (strongly agree):</p>
+            <div class="question">
+                <label class="q-label">Q17. I understand how damaged packages directly affect our customers.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q17" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q17" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q17" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q17" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q17" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q18. I feel personally responsible for ensuring packages arrive in good condition.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q18" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q18" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q18" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q18" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q18" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">Q19. When I see pre-existing damage (from an upstream site), I report and escalate it.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q19" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q19" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q19" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q19" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q19" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" onclick="prevSection()">← Back</button>
+                <button type="button" class="btn btn-next" onclick="nextSection()">Next →</button>
+            </div>
+        </div>
+
+        <!-- SECTION 6: Challenges -->
+        <div class="section" id="section6">
+            <h2 class="section-title">Section 6 — Challenges</h2>
+            <div class="question">
+                <label class="q-label">Q20. When you need guidance on a handling procedure, who do you typically ask?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="q20" value="Direct manager"><span>Direct manager</span></label>
+                    <label><input type="radio" name="q20" value="Ambassador"><span>Ambassador</span></label>
+                    <label><input type="radio" name="q20" value="Experienced colleague"><span>Experienced colleague</span></label>
+                    <label><input type="radio" name="q20" value="Problem Solve team"><span>Problem Solve team</span></label>
+                    <label><input type="radio" name="q20" value="I figure it out myself"><span>I figure it out myself</span></label>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" onclick="prevSection()">← Back</button>
+                <button type="button" class="btn btn-next" onclick="nextSection()">Next →</button>
+            </div>
+        </div>
+
+        <!-- SECTION 7: Your Ideas -->
+        <div class="section" id="section7">
+            <h2 class="section-title">Section 7 — Your Ideas</h2>
+            <p class="section-instruction">Please share your thoughts in the boxes below. Your honest feedback is invaluable.</p>
+            <div class="question">
+                <label class="q-label">Q-A. What is DXG2 doing well on shipment handling?</label>
+                <textarea name="qA" placeholder="Type your answer here..."></textarea>
+            </div>
+            <div class="question">
+                <label class="q-label">Q-B. What one change would make the biggest difference to reducing damage?</label>
+                <textarea name="qB" placeholder="Type your answer here..."></textarea>
+            </div>
+            <div class="question">
+                <label class="q-label">Q-C. Any suggestions for improving associate training or onboarding?</label>
+                <textarea name="qC" placeholder="Type your answer here..."></textarea>
+            </div>
+            <div class="question">
+                <label class="q-label">Q-D. Is there anything else you'd like to share?</label>
+                <textarea name="qD" placeholder="Type your answer here..."></textarea>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" onclick="prevSection()">← Back</button>
+                <button type="button" class="btn btn-submit" onclick="submitForm()">Submit ✓</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="thank-you" id="thankYou">
+        <h2>✅ Thank You!</h2>
+        <p>Your responses have been submitted successfully.<br><br>
+        Your feedback will directly shape training, support, and the way we handle shipments at DXG2.</p>
+    </div>
+</div>
+
+<script>
+    var currentSection = 1;
+    var totalSections = 7;
+
+    function nextSection() {
+        if (currentSection < totalSections) {
+            document.getElementById('section' + currentSection).classList.remove('active');
+            currentSection++;
+            document.getElementById('section' + currentSection).classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+    }
+
+    function prevSection() {
+        if (currentSection > 1) {
+            document.getElementById('section' + currentSection).classList.remove('active');
+            currentSection--;
+            document.getElementById('section' + currentSection).classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+    }
+
+    function updateProgress() {
+        document.getElementById('progressFill').style.width = (currentSection / totalSections * 100) + '%';
+    }
+
+    function getFormData() {
+        var form = document.getElementById('questionnaireForm');
+        var data = {};
+
+        // Single-select radio questions
+        ['q1','q2','q3','q4','q5','q6','q7','q9','q10','q11','q13','q14','q15','q17','q18','q19','q20'].forEach(function(q) {
+            var sel = form.querySelector('input[name="' + q + '"]:checked');
+            data[q] = sel ? sel.value : '';
+        });
+
+        // Multi-select checkbox questions
+        ['q8', 'q12'].forEach(function(q) {
+            var checked = form.querySelectorAll('input[name="' + q + '"]:checked');
+            data[q] = Array.from(checked).map(function(cb) { return cb.value; }).join('; ');
+        });
+
+        // Open text questions
+        ['q16', 'qA', 'qB', 'qC', 'qD'].forEach(function(q) {
+            var ta = form.querySelector('textarea[name="' + q + '"]');
+            data[q] = ta ? ta.value.trim() : '';
+        });
+
+        data['timestamp'] = new Date().toLocaleString('en-GB');
+        return data;
+    }
+
+    function submitForm() {
+        var data = getFormData();
+
         var GOOGLE_SCRIPT_URL = https://script.google.com/macros/s/AKfycbwVK5pmaJDPWhnJFI0k5v63VWhZv5V-btHggAuYEGFzdcKOOI-9kjaxEbFVqV2B2qnaCQ/exec;
 
         fetch(GOOGLE_SCRIPT_URL, {
