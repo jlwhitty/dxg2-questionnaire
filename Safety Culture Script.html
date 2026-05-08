@@ -239,29 +239,8 @@
     var totalSections = 4;
     var submitted = false;
 
-    // ═══════════════════════════════════════════════════════════
-    // GOOGLE SHEETS SETUP INSTRUCTIONS:
-    // 1. Create a Google Sheet with columns:
-    //    Timestamp | Shift | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 | Q11 | Q12
-    // 2. Go to Extensions > Apps Script
-    // 3. Paste this code:
-    //
-    //    function doPost(e) {
-    //      var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    //      var data = JSON.parse(e.postData.contents);
-    //      sheet.appendRow([
-    //        data.timestamp, data.shift,
-    //        data.q1, data.q2, data.q3, data.q4, data.q5,
-    //        data.q6, data.q7, data.q8, data.q9, data.q10,
-    //        data.q11, data.q12
-    //      ]);
-    //      return ContentService.createTextOutput('OK');
-    //    }
-    //
-    // 4. Deploy > New Deployment > Web App > Anyone can access
-    // 5. Copy the URL and paste it below:
-    // ═══════════════════════════════════════════════════════════
-    var GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+    // Posts to existing Google Sheet — routes to "Safety Culture" tab via survey field
+    var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVK5pmaJDPWhnJFI0k5v63VWhZv5V-btHggAuYEGFzdcKOOI-9kjaxEbFVqV2B2qnaCQ/exec';
 
     function updateProgress() {
         document.getElementById('progressFill').style.width = (currentSection / totalSections * 100) + '%';
@@ -315,7 +294,7 @@
         data.q11 = form.querySelector('textarea[name="q11"]').value.trim();
         data.q12 = form.querySelector('textarea[name="q12"]').value.trim();
 
-        if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+        if (GOOGLE_SCRIPT_URL) {
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -323,7 +302,6 @@
                 body: JSON.stringify(data)
             }).then(showThankYou).catch(showThankYou);
         } else {
-            console.log('Survey Response:', JSON.stringify(data, null, 2));
             showThankYou();
         }
     }
