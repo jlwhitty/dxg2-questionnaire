@@ -18,21 +18,14 @@
         .qr-card.safety h2 { color: #0277bd; }
         .qr-card.connections h2 { color: #7b1fa2; }
         .qr-card .part-label { font-size: 0.85em; color: #666; margin-bottom: 16px; }
-        .qr-card .qr-placeholder { width: 200px; height: 200px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; }
+        .qr-card .qr-placeholder { width: 200px; height: 200px; margin: 0 auto 16px; }
         .qr-card .qr-placeholder img { width: 100%; height: 100%; }
         .qr-card .scan-text { font-weight: 700; font-size: 1.1em; margin-bottom: 4px; }
         .qr-card .anon-text { font-size: 0.8em; color: #666; }
         .qr-card .time-text { font-size: 0.85em; color: #444; margin-top: 8px; }
-        .instructions { margin-top: 48px; background: #f8f9fa; border-radius: 12px; padding: 24px; }
-        .instructions h3 { margin-bottom: 12px; }
-        .instructions ol { padding-left: 20px; line-height: 1.8; }
-        .instructions code { background: #e8e8e8; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
-        .url-display { margin-top: 12px; background: #1a1a2e; color: #4fc3f7; padding: 12px 16px; border-radius: 8px; font-family: monospace; font-size: 0.85em; word-break: break-all; }
-        @media print {
-            .instructions { display: none; }
-            .qr-grid { gap: 60px; }
-            body { padding: 20px; }
-        }
+        .footer { text-align: center; margin-top: 40px; font-size: 0.8em; color: #999; }
+        @media print { body { padding: 20px; } .footer { display: none; } }
+        @media (max-width: 600px) { .qr-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -47,7 +40,7 @@
             <div class="qr-placeholder">
                 <img id="qr1" alt="QR Code for Safety Culture Survey">
             </div>
-            <p class="scan-text">Scan to start →</p>
+            <p class="scan-text">📱 Scan to start</p>
             <p class="anon-text">🔒 Anonymous & Confidential</p>
             <p class="time-text">~5 minutes</p>
         </div>
@@ -58,59 +51,26 @@
             <div class="qr-placeholder">
                 <img id="qr2" alt="QR Code for Connections Survey">
             </div>
-            <p class="scan-text">Scan to start →</p>
+            <p class="scan-text">📱 Scan to start</p>
             <p class="anon-text">🔒 Anonymous & Confidential</p>
             <p class="time-text">~5 minutes</p>
         </div>
     </div>
 
-    <div class="instructions">
-        <h3>⚙️ Setup Instructions</h3>
-        <ol>
-            <li><strong>Host the survey files</strong> — Upload both HTML files to any web host (S3, Google Sites, or even open from a shared drive). No GitHub needed.</li>
-            <li><strong>Update the URLs below</strong> — Replace the placeholder URLs with your actual hosted URLs.</li>
-            <li><strong>QR codes auto-generate</strong> — Once you set the URLs, the QR codes will render automatically using the Google Charts API.</li>
-            <li><strong>Print this page</strong> — Use Ctrl+P / Cmd+P. The instructions section hides automatically when printing.</li>
-            <li><strong>Display in break areas</strong> — Laminate and post near the Associate Feedback Board.</li>
-        </ol>
-
-        <h3 style="margin-top: 20px;">🔗 Survey URLs</h3>
-        <p style="margin-top: 8px; font-size: 0.9em; color: #666;">Edit these in the script below, or replace with your hosted URLs:</p>
-        <div class="url-display" id="url1">Part 1: <span id="urlText1">—</span></div>
-        <div class="url-display" style="margin-top: 8px;" id="url2">Part 2: <span id="urlText2">—</span></div>
-
-        <h3 style="margin-top: 20px;">📊 Google Sheets Setup</h3>
-        <ol>
-            <li>Create a Google Sheet (one tab per survey, or two separate sheets)</li>
-            <li>Add column headers matching the survey fields (see comments in each HTML file)</li>
-            <li>Go to <strong>Extensions → Apps Script</strong></li>
-            <li>Paste the <code>doPost()</code> function from the HTML file comments</li>
-            <li>Click <strong>Deploy → New Deployment → Web App</strong></li>
-            <li>Set "Who has access" to <strong>Anyone</strong></li>
-            <li>Copy the deployment URL</li>
-            <li>Paste it into the <code>GOOGLE_SCRIPT_URL</code> variable in each survey HTML file</li>
-        </ol>
-    </div>
+    <p class="footer">Safety Engagement Programme • Prepared by Leigh • Confidential</p>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════
-// SET YOUR HOSTED SURVEY URLs HERE:
-// ═══════════════════════════════════════════════════════════
-var SURVEY_1_URL = 'https://YOUR-HOST/safety-culture-survey.html';
-var SURVEY_2_URL = 'https://YOUR-HOST/connections-belonging-survey.html';
+var BASE = 'https://jlwhitty.github.io/dxg2-questionnaire';
+var SURVEY_1_URL = BASE + '/safety-culture-survey.html';
+var SURVEY_2_URL = BASE + '/connections-belonging-survey.html';
 
-// Generate QR codes using Google Charts API (no dependencies needed)
 function generateQR(elementId, url) {
-    var qrUrl = 'https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=' + encodeURIComponent(url) + '&choe=UTF-8';
-    document.getElementById(elementId).src = qrUrl;
+    document.getElementById(elementId).src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(url);
 }
 
 generateQR('qr1', SURVEY_1_URL);
 generateQR('qr2', SURVEY_2_URL);
-
-document.getElementById('urlText1').textContent = SURVEY_1_URL;
-document.getElementById('urlText2').textContent = SURVEY_2_URL;
 </script>
 </body>
 </html>
