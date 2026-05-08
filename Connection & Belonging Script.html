@@ -239,28 +239,8 @@
     var totalSections = 4;
     var submitted = false;
 
-    // ═══════════════════════════════════════════════════════════
-    // GOOGLE SHEETS SETUP — Same process as Part 1 but use a
-    // separate sheet/tab. Columns:
-    // Timestamp | Shift | Q13 | Q14 | Q15 | Q16 | Q17 | Q18 | Q19 | Q20 | Q21 | Q22 | Open1 | Open2
-    //
-    // Apps Script for this sheet:
-    //
-    //    function doPost(e) {
-    //      var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    //      var data = JSON.parse(e.postData.contents);
-    //      sheet.appendRow([
-    //        data.timestamp, data.shift,
-    //        data.q13, data.q14, data.q15, data.q16, data.q17,
-    //        data.q18, data.q19, data.q20, data.q21, data.q22,
-    //        data.q_open1, data.q_open2
-    //      ]);
-    //      return ContentService.createTextOutput('OK');
-    //    }
-    //
-    // Deploy > New Deployment > Web App > Anyone can access
-    // ═══════════════════════════════════════════════════════════
-    var GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+    // Posts to existing Google Sheet — routes to "Connections & Belonging" tab via survey field
+    var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVK5pmaJDPWhnJFI0k5v63VWhZv5V-btHggAuYEGFzdcKOOI-9kjaxEbFVqV2B2qnaCQ/exec';
 
     function updateProgress() {
         document.getElementById('progressFill').style.width = (currentSection / totalSections * 100) + '%';
@@ -311,7 +291,7 @@
         data.q_open1 = form.querySelector('textarea[name="q_open1"]').value.trim();
         data.q_open2 = form.querySelector('textarea[name="q_open2"]').value.trim();
 
-        if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+        if (GOOGLE_SCRIPT_URL) {
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -319,7 +299,6 @@
                 body: JSON.stringify(data)
             }).then(showThankYou).catch(showThankYou);
         } else {
-            console.log('Survey Response:', JSON.stringify(data, null, 2));
             showThankYou();
         }
     }
