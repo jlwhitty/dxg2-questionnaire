@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Culture Survey — Part 1</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; background: #16213e; border-radius: 12px; padding: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #4fc3f7; font-size: 1.5em; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #90caf9; font-size: 0.85em; margin-bottom: 15px; }
+        .intro { background: #0f3460; border-left: 4px solid #4fc3f7; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-size: 0.9em; line-height: 1.5; }
+        .section { display: none; animation: fadeIn 0.3s ease-in; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .section-title { color: #4fc3f7; font-size: 1.2em; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #4fc3f7; }
+        .question { background: #1a1a3e; border-radius: 8px; padding: 18px; margin-bottom: 15px; }
+        .question label.q-label { display: block; font-weight: 600; color: #e0e0e0; margin-bottom: 12px; font-size: 0.95em; line-height: 1.4; }
+        .radio-group { display: flex; flex-direction: column; gap: 8px; }
+        .radio-group label { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #16213e; border-radius: 6px; cursor: pointer; transition: background 0.2s; font-size: 0.9em; }
+        .radio-group label:hover { background: #0f3460; }
+        input[type="radio"] { accent-color: #4fc3f7; width: 18px; height: 18px; }
+        .likert-scale { display: flex; justify-content: space-between; gap: 5px; margin-top: 5px; }
+        .likert-scale label { flex: 1; text-align: center; padding: 10px 5px; background: #16213e; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 0.8em; }
+        .likert-scale label:hover { background: #0f3460; }
+        .likert-scale input[type="radio"] { display: none; }
+        .likert-scale input[type="radio"]:checked + span { color: #4fc3f7; font-weight: bold; }
+        .likert-scale label:has(input:checked) { background: #0f3460; border: 2px solid #4fc3f7; }
+        .likert-labels { display: flex; justify-content: space-between; font-size: 0.75em; color: #90caf9; margin-bottom: 8px; }
+        textarea { width: 100%; min-height: 80px; background: #16213e; border: 1px solid #2a2a5e; border-radius: 6px; color: #e0e0e0; padding: 12px; font-family: inherit; font-size: 0.9em; resize: vertical; }
+        textarea:focus { outline: none; border-color: #4fc3f7; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 25px; }
+        .btn { padding: 12px 30px; border: none; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-next { background: #4fc3f7; color: #1a1a2e; }
+        .btn-next:hover { background: #81d4fa; }
+        .btn-prev { background: #2a2a5e; color: #e0e0e0; }
+        .btn-prev:hover { background: #3a3a7e; }
+        .btn-submit { background: #66bb6a; color: #1a1a2e; }
+        .btn-submit:hover { background: #81c784; }
+        .progress-bar { width: 100%; height: 6px; background: #2a2a5e; border-radius: 3px; margin-bottom: 25px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #4fc3f7, #81d4fa); border-radius: 3px; transition: width 0.3s ease; }
+        .thank-you { display: none; text-align: center; padding: 40px 20px; }
+        .thank-you h2 { color: #66bb6a; margin-bottom: 15px; }
+        .thank-you p { color: #90caf9; line-height: 1.6; }
+        .section-instruction { font-size: 0.85em; color: #90caf9; font-style: italic; margin-bottom: 15px; }
+        .anon-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(102,187,106,0.15); color: #66bb6a; font-size: 0.8em; font-weight: 600; padding: 6px 12px; border-radius: 20px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Safety Culture Survey</h1>
+    <p class="subtitle">Part 1 — Safety Perception, Voice & Trust</p>
+    <div class="anon-badge">🔒 Anonymous & Confidential</div>
+    <div class="intro">
+        This survey is <strong>separate from SLI and Amazon Connections</strong> — all questions are unique to this programme. No work area is captured. Your honest feedback drives real change.<br><br>
+        <strong>~5 minutes</strong> • Shifts: NS1, NS2, AM's, PM's
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 25%"></div></div>
+
+    <form id="surveyForm">
+        <!-- Section 1: Shift -->
+        <div class="section active" id="section1">
+            <h2 class="section-title">Your Shift</h2>
+            <div class="question">
+                <label class="q-label">Which shift do you work?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="shift" value="NS1"><span>NS1</span></label>
+                    <label><input type="radio" name="shift" value="NS2"><span>NS2</span></label>
+                    <label><input type="radio" name="shift" value="AMs"><span>AM's</span></label>
+                    <label><input type="radio" name="shift" value="PMs"><span>PM's</span></label>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <div></div>
+                <button type="button" class="btn btn-next">Next →</button>
+            </div>
+        </div>
+
+        <!-- Section 2: Safety Perception -->
+        <div class="section" id="section2">
+            <h2 class="section-title">Part A — Safety Perception</h2>
+            <p class="section-instruction">Rate each statement: 1 = Strongly Disagree → 5 = Strongly Agree</p>
+            <div class="question">
+                <label class="q-label">1. I trust the safety processes and systems in my work area.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q1" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q1" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q1" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q1" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q1" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">2. Safety improvements in my area are visible and ongoing.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q2" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q2" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q2" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q2" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q2" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">3. Safety hazards in my area are addressed quickly.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q3" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q3" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q3" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q3" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q3" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">4. I understand the safety procedures specific to my role.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q4" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q4" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q4" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q4" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q4" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">5. I have received adequate training for the tasks I perform.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q5" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q5" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q5" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q5" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q5" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev">← Back</button>
+                <button type="button" class="btn btn-next">Next →</button>
+            </div>
+        </div>
+
+        <!-- Section 3: Safety Voice & Trust -->
+        <div class="section" id="section3">
+            <h2 class="section-title">Part B — Safety Voice & Trust</h2>
+            <p class="section-instruction">Rate each statement: 1 = Strongly Disagree → 5 = Strongly Agree</p>
+            <div class="question">
+                <label class="q-label">6. I believe reporting a safety concern will lead to a positive outcome.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q6" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q6" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q6" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q6" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q6" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">7. When I report a safety issue, I see action taken.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q7" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q7" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q7" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q7" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q7" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">8. My direct leader genuinely engages with me about safety — beyond just metrics.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q8" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q8" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q8" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q8" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q8" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">9. I know who to contact and how to report a hazard or near-miss.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q9" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q9" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q9" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q9" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q9" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">10. I have been personally asked about safety by a leader this week.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q10" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q10" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q10" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q10" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q10" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev">← Back</button>
+                <button type="button" class="btn btn-next">Next →</button>
+            </div>
+        </div>
+
+        <!-- Section 4: Open-Ended -->
+        <div class="section" id="section4">
+            <h2 class="section-title">Part C — Your Voice</h2>
+            <p class="section-instruction">Share as much or as little as you'd like. All responses are anonymous.</p>
+            <div class="question">
+                <label class="q-label">11. What is the one thing you would change to make your work area safer?</label>
+                <textarea name="q11" placeholder="Type your answer here..."></textarea>
+            </div>
+            <div class="question">
+                <label class="q-label">12. Describe a time you felt unsafe at work. What happened? <em style="color:#90caf9">(Optional)</em></label>
+                <textarea name="q12" placeholder="Optional — share only if you're comfortable"></textarea>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev">← Back</button>
+                <button type="button" class="btn btn-submit">Submit Survey ✓</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="thank-you" id="thankYou">
+        <h2>✅ Thank You!</h2>
+        <p>Your responses have been recorded anonymously.<br><br>
+        Your voice matters — we'll share what we heard and what we're doing about it on the Associate Feedback Board.</p>
+    </div>
+</div>
+
+<script>
+(function() {
+    var currentSection = 1;
+    var totalSections = 4;
+    var submitted = false;
+
+    // ═══════════════════════════════════════════════════════════
+    // GOOGLE SHEETS SETUP INSTRUCTIONS:
+    // 1. Create a Google Sheet with columns:
+    //    Timestamp | Shift | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 | Q11 | Q12
+    // 2. Go to Extensions > Apps Script
+    // 3. Paste this code:
+    //
+    //    function doPost(e) {
+    //      var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    //      var data = JSON.parse(e.postData.contents);
+    //      sheet.appendRow([
+    //        data.timestamp, data.shift,
+    //        data.q1, data.q2, data.q3, data.q4, data.q5,
+    //        data.q6, data.q7, data.q8, data.q9, data.q10,
+    //        data.q11, data.q12
+    //      ]);
+    //      return ContentService.createTextOutput('OK');
+    //    }
+    //
+    // 4. Deploy > New Deployment > Web App > Anyone can access
+    // 5. Copy the URL and paste it below:
+    // ═══════════════════════════════════════════════════════════
+    var GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+    function updateProgress() {
+        document.getElementById('progressFill').style.width = (currentSection / totalSections * 100) + '%';
+    }
+
+    function nextSection(e) {
+        e.preventDefault();
+        if (currentSection < totalSections) {
+            document.getElementById('section' + currentSection).classList.remove('active');
+            currentSection++;
+            document.getElementById('section' + currentSection).classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+    }
+
+    function prevSection(e) {
+        e.preventDefault();
+        if (currentSection > 1) {
+            document.getElementById('section' + currentSection).classList.remove('active');
+            currentSection--;
+            document.getElementById('section' + currentSection).classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+    }
+
+    function submitForm(e) {
+        e.preventDefault();
+        if (submitted) return;
+        submitted = true;
+
+        var btn = e.target;
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+
+        var form = document.getElementById('surveyForm');
+        var data = { timestamp: new Date().toLocaleString('en-GB'), survey: 'Safety Culture' };
+
+        // Shift
+        var shift = form.querySelector('input[name="shift"]:checked');
+        data.shift = shift ? shift.value : '';
+
+        // Likert Q1-Q10
+        for (var i = 1; i <= 10; i++) {
+            var sel = form.querySelector('input[name="q' + i + '"]:checked');
+            data['q' + i] = sel ? sel.value : '';
+        }
+
+        // Open-ended Q11-Q12
+        data.q11 = form.querySelector('textarea[name="q11"]').value.trim();
+        data.q12 = form.querySelector('textarea[name="q12"]').value.trim();
+
+        if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(showThankYou).catch(showThankYou);
+        } else {
+            console.log('Survey Response:', JSON.stringify(data, null, 2));
+            showThankYou();
+        }
+    }
+
+    function showThankYou() {
+        document.getElementById('surveyForm').style.display = 'none';
+        document.querySelector('.progress-bar').style.display = 'none';
+        document.getElementById('thankYou').style.display = 'block';
+    }
+
+    document.getElementById('surveyForm').addEventListener('submit', function(e) { e.preventDefault(); });
+
+    document.querySelectorAll('.btn-next').forEach(function(btn) { btn.addEventListener('click', nextSection); });
+    document.querySelectorAll('.btn-prev').forEach(function(btn) { btn.addEventListener('click', prevSection); });
+    document.querySelector('.btn-submit').addEventListener('click', submitForm);
+})();
+</script>
+</body>
+</html>

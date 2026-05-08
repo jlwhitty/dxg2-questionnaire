@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connections & Belonging Survey — Part 2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; background: #16213e; border-radius: 12px; padding: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #ce93d8; font-size: 1.5em; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #e1bee7; font-size: 0.85em; margin-bottom: 15px; }
+        .intro { background: #0f3460; border-left: 4px solid #ce93d8; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-size: 0.9em; line-height: 1.5; }
+        .section { display: none; animation: fadeIn 0.3s ease-in; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .section-title { color: #ce93d8; font-size: 1.2em; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #ce93d8; }
+        .question { background: #1a1a3e; border-radius: 8px; padding: 18px; margin-bottom: 15px; }
+        .question label.q-label { display: block; font-weight: 600; color: #e0e0e0; margin-bottom: 12px; font-size: 0.95em; line-height: 1.4; }
+        .radio-group { display: flex; flex-direction: column; gap: 8px; }
+        .radio-group label { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #16213e; border-radius: 6px; cursor: pointer; transition: background 0.2s; font-size: 0.9em; }
+        .radio-group label:hover { background: #0f3460; }
+        input[type="radio"] { accent-color: #ce93d8; width: 18px; height: 18px; }
+        .likert-scale { display: flex; justify-content: space-between; gap: 5px; margin-top: 5px; }
+        .likert-scale label { flex: 1; text-align: center; padding: 10px 5px; background: #16213e; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 0.8em; }
+        .likert-scale label:hover { background: #0f3460; }
+        .likert-scale input[type="radio"] { display: none; }
+        .likert-scale input[type="radio"]:checked + span { color: #ce93d8; font-weight: bold; }
+        .likert-scale label:has(input:checked) { background: #0f3460; border: 2px solid #ce93d8; }
+        .likert-labels { display: flex; justify-content: space-between; font-size: 0.75em; color: #e1bee7; margin-bottom: 8px; }
+        textarea { width: 100%; min-height: 80px; background: #16213e; border: 1px solid #2a2a5e; border-radius: 6px; color: #e0e0e0; padding: 12px; font-family: inherit; font-size: 0.9em; resize: vertical; }
+        textarea:focus { outline: none; border-color: #ce93d8; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 25px; }
+        .btn { padding: 12px 30px; border: none; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-next { background: #ce93d8; color: #1a1a2e; }
+        .btn-next:hover { background: #e1bee7; }
+        .btn-prev { background: #2a2a5e; color: #e0e0e0; }
+        .btn-prev:hover { background: #3a3a7e; }
+        .btn-submit { background: #66bb6a; color: #1a1a2e; }
+        .btn-submit:hover { background: #81c784; }
+        .progress-bar { width: 100%; height: 6px; background: #2a2a5e; border-radius: 3px; margin-bottom: 25px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ce93d8, #e1bee7); border-radius: 3px; transition: width 0.3s ease; }
+        .thank-you { display: none; text-align: center; padding: 40px 20px; }
+        .thank-you h2 { color: #66bb6a; margin-bottom: 15px; }
+        .thank-you p { color: #e1bee7; line-height: 1.6; }
+        .section-instruction { font-size: 0.85em; color: #e1bee7; font-style: italic; margin-bottom: 15px; }
+        .anon-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(102,187,106,0.15); color: #66bb6a; font-size: 0.8em; font-weight: 600; padding: 6px 12px; border-radius: 20px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Connections & Belonging Survey</h1>
+    <p class="subtitle">Part 2 — Inclusion, Culture & Feel</p>
+    <div class="anon-badge">🔒 Anonymous & Confidential</div>
+    <div class="intro">
+        This survey is <strong>separate from SLI and Amazon Connections</strong> — all questions are unique to this programme. It measures psychological safety, leadership follow-through, recognition quality, energy signals, and growth intent.<br><br>
+        <strong>~5 minutes</strong> • Shifts: NS1, NS2, AM's, PM's
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 25%"></div></div>
+
+    <form id="surveyForm">
+        <!-- Section 1: Shift -->
+        <div class="section active" id="section1">
+            <h2 class="section-title">Your Shift</h2>
+            <div class="question">
+                <label class="q-label">Which shift do you work?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="shift" value="NS1"><span>NS1</span></label>
+                    <label><input type="radio" name="shift" value="NS2"><span>NS2</span></label>
+                    <label><input type="radio" name="shift" value="AMs"><span>AM's</span></label>
+                    <label><input type="radio" name="shift" value="PMs"><span>PM's</span></label>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <div></div>
+                <button type="button" class="btn btn-next">Next →</button>
+            </div>
+        </div>
+
+        <!-- Section 2: Connections & Inclusion -->
+        <div class="section" id="section2">
+            <h2 class="section-title">Part D — Connections & Inclusion</h2>
+            <p class="section-instruction">Rate each statement: 1 = Strongly Disagree → 5 = Strongly Agree</p>
+            <div class="question">
+                <label class="q-label">13. I feel comfortable being myself around my team without judgement.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q13" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q13" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q13" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q13" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q13" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">14. My manager/PA knows my name and checks in with me.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q14" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q14" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q14" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q14" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q14" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">15. I feel respected by my peers and leadership.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q15" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q15" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q15" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q15" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q15" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">16. When I share feedback or concerns, I see follow-through from leadership.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q16" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q16" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q16" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q16" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q16" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">17. My ideas and suggestions are genuinely considered by my team and leadership.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q17" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q17" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q17" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q17" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q17" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev">← Back</button>
+                <button type="button" class="btn btn-next">Next →</button>
+            </div>
+        </div>
+
+        <!-- Section 3: Culture & Feel -->
+        <div class="section" id="section3">
+            <h2 class="section-title">Part E — Culture & Feel</h2>
+            <p class="section-instruction">Rate each statement: 1 = Strongly Disagree → 5 = Strongly Agree</p>
+            <div class="question">
+                <label class="q-label">18. I feel energised rather than drained by my typical work day.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q18" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q18" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q18" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q18" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q18" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">19. The recognition I receive feels specific and meaningful — not generic.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q19" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q19" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q19" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q19" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q19" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">20. My team has a positive atmosphere.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q20" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q20" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q20" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q20" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q20" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">21. I feel the site cares about associates as people, not just productivity.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q21" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q21" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q21" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q21" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q21" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">22. I see myself continuing to grow and develop at this site.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q22" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q22" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q22" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q22" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q22" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev">← Back</button>
+                <button type="button" class="btn btn-next">Next →</button>
+            </div>
+        </div>
+
+        <!-- Section 4: Open-Ended -->
+        <div class="section" id="section4">
+            <h2 class="section-title">Part F — Your Voice</h2>
+            <p class="section-instruction">Share as much or as little as you'd like. All responses are anonymous.</p>
+            <div class="question">
+                <label class="q-label">What one thing would make you feel more connected to your team?</label>
+                <textarea name="q_open1" placeholder="Type your answer here..."></textarea>
+            </div>
+            <div class="question">
+                <label class="q-label">Is there anything that makes you feel excluded or overlooked? <em style="color:#e1bee7">(Optional)</em></label>
+                <textarea name="q_open2" placeholder="Optional — share only if you're comfortable"></textarea>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev">← Back</button>
+                <button type="button" class="btn btn-submit">Submit Survey ✓</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="thank-you" id="thankYou">
+        <h2>✅ Thank You!</h2>
+        <p>Your responses have been recorded anonymously.<br><br>
+        Your voice matters — we'll share what we heard and what we're doing about it on the Associate Feedback Board.</p>
+    </div>
+</div>
+
+<script>
+(function() {
+    var currentSection = 1;
+    var totalSections = 4;
+    var submitted = false;
+
+    // ═══════════════════════════════════════════════════════════
+    // GOOGLE SHEETS SETUP — Same process as Part 1 but use a
+    // separate sheet/tab. Columns:
+    // Timestamp | Shift | Q13 | Q14 | Q15 | Q16 | Q17 | Q18 | Q19 | Q20 | Q21 | Q22 | Open1 | Open2
+    //
+    // Apps Script for this sheet:
+    //
+    //    function doPost(e) {
+    //      var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    //      var data = JSON.parse(e.postData.contents);
+    //      sheet.appendRow([
+    //        data.timestamp, data.shift,
+    //        data.q13, data.q14, data.q15, data.q16, data.q17,
+    //        data.q18, data.q19, data.q20, data.q21, data.q22,
+    //        data.q_open1, data.q_open2
+    //      ]);
+    //      return ContentService.createTextOutput('OK');
+    //    }
+    //
+    // Deploy > New Deployment > Web App > Anyone can access
+    // ═══════════════════════════════════════════════════════════
+    var GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+    function updateProgress() {
+        document.getElementById('progressFill').style.width = (currentSection / totalSections * 100) + '%';
+    }
+
+    function nextSection(e) {
+        e.preventDefault();
+        if (currentSection < totalSections) {
+            document.getElementById('section' + currentSection).classList.remove('active');
+            currentSection++;
+            document.getElementById('section' + currentSection).classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+    }
+
+    function prevSection(e) {
+        e.preventDefault();
+        if (currentSection > 1) {
+            document.getElementById('section' + currentSection).classList.remove('active');
+            currentSection--;
+            document.getElementById('section' + currentSection).classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+    }
+
+    function submitForm(e) {
+        e.preventDefault();
+        if (submitted) return;
+        submitted = true;
+
+        var btn = e.target;
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+
+        var form = document.getElementById('surveyForm');
+        var data = { timestamp: new Date().toLocaleString('en-GB'), survey: 'Connections & Belonging' };
+
+        var shift = form.querySelector('input[name="shift"]:checked');
+        data.shift = shift ? shift.value : '';
+
+        for (var i = 13; i <= 22; i++) {
+            var sel = form.querySelector('input[name="q' + i + '"]:checked');
+            data['q' + i] = sel ? sel.value : '';
+        }
+
+        data.q_open1 = form.querySelector('textarea[name="q_open1"]').value.trim();
+        data.q_open2 = form.querySelector('textarea[name="q_open2"]').value.trim();
+
+        if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(showThankYou).catch(showThankYou);
+        } else {
+            console.log('Survey Response:', JSON.stringify(data, null, 2));
+            showThankYou();
+        }
+    }
+
+    function showThankYou() {
+        document.getElementById('surveyForm').style.display = 'none';
+        document.querySelector('.progress-bar').style.display = 'none';
+        document.getElementById('thankYou').style.display = 'block';
+    }
+
+    document.getElementById('surveyForm').addEventListener('submit', function(e) { e.preventDefault(); });
+    document.querySelectorAll('.btn-next').forEach(function(btn) { btn.addEventListener('click', nextSection); });
+    document.querySelectorAll('.btn-prev').forEach(function(btn) { btn.addEventListener('click', prevSection); });
+    document.querySelector('.btn-submit').addEventListener('click', submitForm);
+})();
+</script>
+</body>
+</html>
