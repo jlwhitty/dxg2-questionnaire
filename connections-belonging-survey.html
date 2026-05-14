@@ -148,7 +148,18 @@
             <p class="section-instruction">Rate each statement: 1 = Strongly Disagree → 5 = Strongly Agree</p>
 
             <div class="question">
-                <label class="q-label">19. The recognition I receive feels specific and meaningful — not generic.</label>
+                <label class="q-label">18. The recognition I receive feels specific and meaningful — not generic.</label>
+                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <div class="likert-scale">
+                    <label><input type="radio" name="q18" value="1"><span>1</span></label>
+                    <label><input type="radio" name="q18" value="2"><span>2</span></label>
+                    <label><input type="radio" name="q18" value="3"><span>3</span></label>
+                    <label><input type="radio" name="q18" value="4"><span>4</span></label>
+                    <label><input type="radio" name="q18" value="5"><span>5</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label class="q-label">19. My team has a positive atmosphere.</label>
                 <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
                 <div class="likert-scale">
                     <label><input type="radio" name="q19" value="1"><span>1</span></label>
@@ -159,7 +170,7 @@
                 </div>
             </div>
             <div class="question">
-                <label class="q-label">20. My team has a positive atmosphere.</label>
+                <label class="q-label">20. I feel the site cares about associates as people, not just productivity.</label>
                 <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
                 <div class="likert-scale">
                     <label><input type="radio" name="q20" value="1"><span>1</span></label>
@@ -170,7 +181,7 @@
                 </div>
             </div>
             <div class="question">
-                <label class="q-label">21. I feel the site cares about associates as people, not just productivity.</label>
+                <label class="q-label">21. I see myself continuing to grow and develop at this site.</label>
                 <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
                 <div class="likert-scale">
                     <label><input type="radio" name="q21" value="1"><span>1</span></label>
@@ -178,17 +189,6 @@
                     <label><input type="radio" name="q21" value="3"><span>3</span></label>
                     <label><input type="radio" name="q21" value="4"><span>4</span></label>
                     <label><input type="radio" name="q21" value="5"><span>5</span></label>
-                </div>
-            </div>
-            <div class="question">
-                <label class="q-label">22. I see myself continuing to grow and develop at this site.</label>
-                <div class="likert-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
-                <div class="likert-scale">
-                    <label><input type="radio" name="q22" value="1"><span>1</span></label>
-                    <label><input type="radio" name="q22" value="2"><span>2</span></label>
-                    <label><input type="radio" name="q22" value="3"><span>3</span></label>
-                    <label><input type="radio" name="q22" value="4"><span>4</span></label>
-                    <label><input type="radio" name="q22" value="5"><span>5</span></label>
                 </div>
             </div>
             <div class="nav-buttons">
@@ -273,7 +273,7 @@
         var shift = form.querySelector('input[name="shift"]:checked');
         data.shift = shift ? shift.value : '';
 
-        for (var i = 13; i <= 22; i++) {
+        for (var i = 13; i <= 21; i++) {
             var sel = form.querySelector('input[name="q' + i + '"]:checked');
             data['q' + i] = sel ? sel.value : '';
         }
